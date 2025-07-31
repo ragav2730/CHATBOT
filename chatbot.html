@@ -27,7 +27,7 @@
 
       );
     }
-    function ChatMessage({message,sender})
+    function ChatMessage({message,sender}) // name 
     {
      // const message = props.message;
    /* if(sender=="robot")
@@ -52,43 +52,63 @@
         </div>
       );
     }
+    function Messages() // already with this name one function u created but here first letter Caps
+    {
+       const chatMessages=[
+          {
+            message:"hello",
+            sender:"user",
+            id:'id1'
+          },
+          {
+            message:"Hello! This is Genova, How Can I Help You? ",
+            sender:"robot",
+            id:'id2'
+          },
+          {
+            message:"can you get me todays date?",
+            sender:"user",
+            id:'id3'
+          },
+          {
+            message:" September 31",
+            sender:"robot",
+            id:'id4'
+          }
+          ];
+       return(
+        <>
+        {chatMessages.map((chatMessage)=>
+          {
+            return (
+            <ChatMessage 
+              message={chatMessage.message}
+              sender={chatMessage.sender}
+              key={chatMessage.id}
+              />
+            );
+          }
+          )}
+        </>
+       );
+          
+    }
+    
     function App()
     {
-      const chatMessages=[
-      {
-        message:"hello",
-        sender:"user"
-      },
-      {
-        message:"Hello! This is Genova, How Can I Help You? ",
-        sender:"robot"
-      },
-      {
-        message:"can you get me todays date?",
-        sender:"user"
-      },
-      {
-        message:" September 31",
-        sender:"robot"
-      }
-      ];
-     const chatMessageComponents = chatMessages.map((chatMessage)=>
-      {
-        return (
-          <ChatMessage 
-          message={chatMessage.message}
-          sender={chatMessage.sender}
-          />
-        );
-      }
-      ); 
+     
+      
+          
 
      return (
         <>
             <ChatInput />
-            {chatMessageComponents}
+            <Messages />
+
+        </>
+            
           
-      </>
+        
 
       );
 
