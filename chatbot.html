@@ -45,26 +45,49 @@
         <div>
           {sender==="robot" && 
           (<img src="robot.png" width="50px" />)}
-          {message}
+          
           {sender==="user" && 
           (<img src="user.png" width="50px" />)}
-        
+         {message}
         </div>
       );
     }
     function App()
     {
-      return (
+      const chatMessages=[
+      {
+        message:"hello",
+        sender:"user"
+      },
+      {
+        message:"Hello! This is Genova, How Can I Help You? ",
+        sender:"robot"
+      },
+      {
+        message:"can you get me todays date?",
+        sender:"user"
+      },
+      {
+        message:" September 31",
+        sender:"robot"
+      }
+      ];
+     const chatMessageComponents = chatMessages.map((chatMessage)=>
+      {
+        return (
+          <ChatMessage 
+          message={chatMessage.message}
+          sender={chatMessage.sender}
+          />
+        );
+      }
+      ); 
+
+     return (
         <>
             <ChatInput />
-            <ChatMessage 
-                message="Hello" 
-                sender ="user" 
-            />
-            <ChatMessage 
-                message="Hello This is GenNova" 
-                sender ="robot"
-            />
+            {chatMessageComponents}
+          
       </>
 
       );
