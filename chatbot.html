@@ -52,9 +52,10 @@
         </div>
       );
     }
+   
     function Messages() // already with this name one function u created but here first letter Caps
     {
-       const chatMessages=[
+       const [chatMessages,setChatMessages]=React.useState([
           {
             message:"hello",
             sender:"user",
@@ -75,9 +76,27 @@
             sender:"robot",
             id:'id4'
           }
-          ];
+          ]); // this all are initial message if not understand see u r note 
+      // const chatMessages=array[0]; // initial message
+       //const setChatMessages=array[1]; // updater Function has shortcuts in upper
+           function SendMessage()
+          {     setChatMessages([
+                  ...chatMessages,
+                  {
+                    message:'test',
+                    sender:'user',
+                    id: crypto.randomUUID()
+                  }
+                ]);
+
+                  
+                
+                
+                  console.log(chatMessages);
+           }
        return(
         <>
+        <button onClick={SendMessage}>Send me the message</button>
         {chatMessages.map((chatMessage)=>
           {
             return (
