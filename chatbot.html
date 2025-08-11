@@ -2,6 +2,66 @@
 <html>
   <head>
     <title>ChatBot</title>
+    <style>
+      body{
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .send-button
+      {
+        background-color: rgba(3, 99, 3, 0.764);
+        color: white;
+        padding:12px 20px;
+        margin-left: 10px;
+        border: none;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+      .chat-input
+      {
+        padding: 12px 15px;
+        border-radius: 10px;
+        border-width:1px;
+        font-size: 15px;
+        flex-grow: 1;
+       
+
+      }
+      .input-container
+      {
+        display: flex;
+        margin-bottom: 20px;
+      }
+      .app-container
+      {
+        max-width:600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .chat-message-user
+      {
+        display: flex;
+        justify-content:end;
+        align-items: start;
+       }
+       .chat-message-robot
+       {
+        display: flex;
+        align-items: start;
+       }
+      .chat-input-message
+      {
+        background-color: rgb(238, 238, 238);
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-right: 10px;
+        margin-bottom: 20px;
+        margin-left: 10px;
+        max-width: 300px;
+      }
+
+    </style>
   </head>
   <body>
   
@@ -16,7 +76,7 @@
     <script type="text/babel">
       
     function ChatInput({chatMessages,setChatMessages})
-    { const[inputText,setInputText]=React.useState(' ');
+    { const[inputText,setInputText]=React.useState('');
 
       function saveInputText(event)
       {
@@ -25,16 +85,22 @@
       function sendMessage()
       {
         console.log(inputText);
-        const response=Chatbot.getResponse(inputText);
-          setChatMessages(
-                [
+       
+        const newChatmessages=[
                   ...chatMessages,
                   {
                     message:inputText,
                     sender:'user',
                     id: crypto.randomUUID()
                   },
-                  {
+                 
+                ]
+          setChatMessages(newChatmessages);
+           const response=Chatbot.getResponse(inputText);
+                
+                setChatMessages([
+                  ...newChatmessages,
+                   { 
                     message:response,
                     sender:'robot',
                     id: crypto.randomUUID()
@@ -42,19 +108,21 @@
                   }
                 ]);
                 
-                console.log(response);
                 setInputText('');
       }
       return (
-      <>
+      <div className="input-container">
         <input 
-        placeholder="Send a Message to ChatBot " 
+        placeholder="Send a Message to ChatBot" 
+        className="chat-input"
         size="30" 
         onChange={saveInputText}
         value={inputText} //with this we can control the text inside the input box
         />
-        <button onClick={sendMessage}>Send</button>
-      </>
+        <button onClick={sendMessage}
+        className="send-button"
+        >Send</button>
+      </div>
 
       );
     }
@@ -73,13 +141,18 @@
     }*/
       return (
 
-        <div>
+        <div className={
+          sender==='user'
+          ? 'chat-message-user'
+          : 'chat-message-robot'
+        
+        }>
           {sender==="robot" && 
           (<img src="robot.png" width="50px" />)}
-          
+          <div className="chat-input-message">{message} </div>
           {sender==="user" && 
           (<img src="user.png" width="50px" />)}
-         {message}
+         
         </div>
       );
     }
@@ -111,26 +184,13 @@
     {
         // lifting the state up to share this  const [chatMessages,setChatMessages]=React.useState... to both chatInput function and and also for Message function because if it is only in Messages() func it will not bes used by ChatInput()
        const [chatMessages,setChatMessages]=React.useState([
-          {
-            message:"hello",
-            sender:"user",
-            id:'id1'
-          },
+         
           {
             message:"Hello! This is Genova, How Can I Help You? ",
             sender:"robot",
             id:'id2'
-          },
-          {
-            message:"can you get me todays date?",
-            sender:"user",
-            id:'id3'
-          },
-          {
-            message:" September 31",
-            sender:"robot",
-            id:'id4'
           }
+          
           ]); // this all are initial message if not understand see u r note 
       // const chatMessages=array[0]; // initial message
        //const setChatMessages=array[1]; // updater Function has shortcuts in upper
@@ -138,13 +198,13 @@
           
 
      return (
-        <>
+        <div className="app-container">
             <ChatInput chatMessages={chatMessages}
                         setChatMessages={setChatMessages}
             />
             <Messages chatMessages={chatMessages} />
 
-        </>
+        </div>
             
           
         
