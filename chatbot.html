@@ -5,6 +5,8 @@
     <style>
       body{
         font-family: Arial, Helvetica, sans-serif;
+        margin-top: 0;
+        margin-bottom: 0;
       }
       .send-button
       {
@@ -17,6 +19,7 @@
         font-size: 15px;
         cursor: pointer;
         flex-shrink: 0;
+         
       }
       .chat-input
       {
@@ -25,19 +28,29 @@
         border-width:1px;
         font-size: 15px;
         flex-grow: 1;
+        
+      
        
 
       }
       .input-container
       {
         display: flex;
-        margin-bottom: 20px;
+        margin-bottom: 60px;
+        width: 100%;
+        
+        
       }
       .app-container
       {
         max-width:600px;
         margin-left: auto;
         margin-right: auto;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        
+        
       }
       .chat-message-user
       {
@@ -59,6 +72,14 @@
         margin-bottom: 20px;
         margin-left: 10px;
         max-width: 300px;
+      }
+      .chat-messages-container
+      {
+        flex-grow: 1;
+        margin-top: 20px;
+        overflow: scroll;
+        scrollbar-width: none;  /* hiding scroll bars */
+        
       }
 
     </style>
@@ -82,7 +103,7 @@
       {
          setInputText(event.target.value);
       }
-      function sendMessage()
+      async function sendMessage()
       {
         console.log(inputText);
        
@@ -96,7 +117,7 @@
                  
                 ]
           setChatMessages(newChatmessages);
-           const response=Chatbot.getResponse(inputText);
+           const response=await Chatbot.getResponseAsync(inputText);
                 
                 setChatMessages([
                   ...newChatmessages,
@@ -118,6 +139,7 @@
         size="30" 
         onChange={saveInputText}
         value={inputText} //with this we can control the text inside the input box
+        onKeyDown={(e)=>e.key=='Enter' && sendMessage()}
         />
         <button onClick={sendMessage}
         className="send-button"
@@ -158,11 +180,21 @@
     }
    
     function Messages({chatMessages}) // already with this name one function u created but here first letter Caps
-    {
+    {   
+      const chatMessagesRef=React.useRef(null);
+      React.useEffect(()=>{
+        const containerElem=chatMessagesRef.current;
+        if(containerElem)
+      {
+        containerElem.scrollTop=containerElem.scrollHeight;
+      }
+      },[chatMessages])
       
            
        return(
-        <>
+        <div className="chat-messages-container"
+        ref={chatMessagesRef}
+        >
         
         {chatMessages.map((chatMessage)=>
           {
@@ -175,7 +207,7 @@
             );
           }
           )}
-        </>
+        </div>
        );
           
     }
@@ -199,10 +231,11 @@
 
      return (
         <div className="app-container">
+            
+            <Messages  chatMessages={chatMessages} />
             <ChatInput chatMessages={chatMessages}
                         setChatMessages={setChatMessages}
             />
-            <Messages chatMessages={chatMessages} />
 
         </div>
             
